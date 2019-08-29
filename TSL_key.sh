@@ -7,11 +7,11 @@ case $1 in
 
      cfssl)
           wget -4 https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -P /usr/local/src
-          wget -4 https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 
-          wget -4 https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 
-          mv /usr/local/srccfssl_linux-amd64 /usr/bin/cfssl
-          mv /usr/local/srccfssljson_linux-amd64 /usr/bin/cfssljson
-          mv /usr/local/srccfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
+          wget -4 https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -P /usr/local/src
+          wget -4 https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64 -P /usr/local/src
+          mv /usr/local/src/cfssl_linux-amd64 /usr/bin/cfssl
+          mv /usr/local/src/cfssljson_linux-amd64 /usr/bin/cfssljson
+          mv /usr/local/src/cfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
           chmod +x /usr/bin/cfssl*
           ;;
         ca)
@@ -30,7 +30,8 @@ case $1 in
                           "usages": [
                               "signing",
                               "key encipherment",
-                              "server auth"
+                              "server auth",
+                              "clinet auth"
                           ]
                       }
                   }
@@ -63,7 +64,7 @@ EOF
 
           #生成server证书和私钥
     server)
-          cfssl print-defaults csr > server-csr.json
+          cd /opt/ssl && cfssl print-defaults csr > server-csr.json
           cat > server-csr.json << EOF                     
           {
               "CN": "kubernetes",          
@@ -97,7 +98,7 @@ EOF
 
           #生成clinet证书和私钥
      clinet)
-           cfssl print-defaults csr > admin-csr.json
+           cd /opt/ssl && cfssl print-defaults csr > admin-csr.json
            cat > admin-csr.json  << EOF                                           
            {
                "CN": "admin",
@@ -123,7 +124,7 @@ EOF
   
          #生成proxy证书秘钥
       proxy)
-           cfssl print-defaults csr > kube-proxy-csr.json
+           cd /opt/ssl && cfssl print-defaults csr > kube-proxy-csr.json
            cat > kube-proxy-csr.json << EOF
            {
                "CN": "system:kube-proxy",
