@@ -24,6 +24,6 @@ echo 'k8s-node2 192.168.1.242' >> /etc/hosts
 #创建kubernetes项目存放目录
 mkdir -p  /opt/kubernetes/{ssl,bin,cfg}
 
-
+#测试提交更新
 
 
